@@ -1,0 +1,8 @@
+.env
+node_modules
+supabase
+dist
+.vite
+guidelines
+ATTRIBUTIONs.md
+postcss.config.mjs
