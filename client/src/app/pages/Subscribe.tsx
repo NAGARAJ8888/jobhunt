@@ -24,6 +24,11 @@ export function Subscribe() {
         setIsLoading(true);
         try {
           // Call backend to verify the session and update subscription
+
+          const backendUrl = import.meta.env.VITE_BACKEND_URL;
+          console.log('Backend URL:', backendUrl);
+          console.log('Full URL:', `${backendUrl}/api/subscriptions/verify-session`);
+
           const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/subscriptions/verify-session`, {
             method: "POST",
             headers: {
