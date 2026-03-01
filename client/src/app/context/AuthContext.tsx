@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { projectId, publicAnonKey } from "../../../utils/supabase/info";
 
 import { User } from "../types";
 

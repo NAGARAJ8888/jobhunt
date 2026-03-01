@@ -185,7 +185,7 @@ export function Header({ onSignInClick, onSignUpClick, onPostJobClick }: HeaderP
                 <User className="h-4 w-4" />
                 Sign In
               </Button>
-              <Button className="hidden md:block cursor-pointer" onClick={onSignUpClick}>
+              <Button className="hidden md:block bg-blue-400 hover:bg-blue-500 text-white cursor-pointer" onClick={onSignUpClick}>
                 Get Started
               </Button>
             </>

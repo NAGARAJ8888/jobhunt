@@ -236,12 +236,12 @@ export function SignInModal({ open, onClose, onSwitchToSignUp }: SignInModalProp
                 setForgotEmail(formData.email);
                 setMode("forgot_request");
               }}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-blue-600 hover:underline cursor-pointer"
             >
               Forgot password?
             </button>
 
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button type="submit" className="w-full bg-blue-400 hover:bg-blue-500 text-white cursor-pointer" disabled={isSubmitting}>
               {isSubmitting ? "Signing In..." : "Sign In"}
             </Button>
 
@@ -250,7 +250,7 @@ export function SignInModal({ open, onClose, onSwitchToSignUp }: SignInModalProp
               <button
                 type="button"
                 onClick={onSwitchToSignUp}
-                className="text-blue-600 hover:underline font-medium"
+                className="text-blue-600 cursor-pointer hover:underline font-medium"
               >
                 Sign Up
               </button>

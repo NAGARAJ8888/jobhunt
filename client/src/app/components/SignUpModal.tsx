@@ -181,7 +181,7 @@ export function SignUpModal({ open, onClose, onSwitchToSignIn }: SignUpModalProp
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button type="submit" className="w-full bg-blue-400 hover:bg-blue-500 text-white cursor-pointer" disabled={isSubmitting}>
             {isSubmitting ? "Creating Account..." : "Sign Up"}
           </Button>
 
@@ -190,7 +190,7 @@ export function SignUpModal({ open, onClose, onSwitchToSignIn }: SignUpModalProp
             <button
               type="button"
               onClick={onSwitchToSignIn}
-              className="text-blue-600 hover:underline font-medium"
+              className="text-blue-600 hover:underline font-medium cursor-pointer"
             >
               Sign In
             </button>
