@@ -27,7 +27,24 @@ export async function createCheckoutSession(
   let customer;
 
   if (customerId) {
-    customer = await stripe.customers.retrieve(customerId);
+    try {
+      customer = await stripe.customers.retrieve(customerId);
+      console.log('Retrieved existing customer:', customer.id);
+    } catch (customerError: any) {
+      console.error('Error retrieving customer:', customerError.message);
+      // If customer not found, create a new one
+      if (customerError.code === 'resource_missing') {
+        console.log('Customer not found, creating new customer');
+        customer = await stripe.customers.create({
+          email,
+          metadata: {
+            userId,
+          },
+        });
+      } else {
+        throw customerError;
+      }
+    }
   } else {
     customer = await stripe.customers.create({
       email,
@@ -35,7 +52,14 @@ export async function createCheckoutSession(
         userId,
       },
     });
+    console.log('Created new customer:', customer.id);
   }
+
+  if (!STRIPE_PRICE_ID) {
+    throw new Error('STRIPE_PRICE_ID is not configured');
+  }
+
+  console.log('Creating checkout session with price ID:', STRIPE_PRICE_ID);
 
   const session = await stripe.checkout.sessions.create({
     customer: customer.id,
@@ -54,6 +78,7 @@ export async function createCheckoutSession(
     },
   });
 
+  console.log('Created checkout session:', session.id);
   return session;
 }
 

@@ -18,16 +18,28 @@ router.post('/create-checkout-session', async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    console.log('Creating checkout session for user:', userId, 'with customerId:', user.stripeCustomerId);
+
     const session = await createCheckoutSession(
       userId,
       user.email,
       user.stripeCustomerId || undefined
     );
 
+    console.log('Checkout session created successfully:', session.id);
     res.json({ url: session.url });
   } catch (error: any) {
     console.error('Error creating checkout session:', error);
-    res.status(500).json({ error: error.message || 'Failed to create checkout session' });
+    
+    // Provide more detailed error information
+    const errorMessage = error.message || 'Failed to create checkout session';
+    const errorCode = error.code || 'unknown_error';
+    
+    res.status(500).json({ 
+      error: errorMessage,
+      code: errorCode,
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
