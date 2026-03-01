@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function fetchSubscriptionStatus(userId: string) {
     try {
-      const response = await fetch(`http://localhost:5000/api/subscriptions/status/${userId}`);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/subscriptions/status/${userId}`);
       if (response.ok) {
         const data = await response.json();
         setUser((prevUser) => {
@@ -93,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Call Node.js API to create user
       const response = await fetch(
-        "http://localhost:5000/api/signup",
+        `${import.meta.env.VITE_BACKEND_URL}/api/signup`,
         {
           method: "POST",
           headers: {
@@ -139,7 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // Call Node.js API to sign in
       const response = await fetch(
-        "http://localhost:5000/api/signin",
+        `${import.meta.env.VITE_BACKEND_URL}/api/signin`,
         {
           method: "POST",
           headers: {

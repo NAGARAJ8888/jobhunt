@@ -78,7 +78,7 @@ export function ApplicationForm({ jobId, jobTitle, company, featured = false, on
         formDataToSend.append('resumeUrl', resumeUrl);
       }
 
-      const response = await fetch('http://localhost:5000/api/applications/apply', {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/applications/apply`, {
         method: 'POST',
         body: formDataToSend,
       });

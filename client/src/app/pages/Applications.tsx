@@ -35,7 +35,7 @@ import {
 } from "lucide-react";
 import { Application, Job } from "../types";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/api`;
 
 type EditableJobFields = Pick<
   Job,

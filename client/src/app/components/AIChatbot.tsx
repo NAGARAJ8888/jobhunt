@@ -8,7 +8,7 @@ import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/api`;
 const GUEST_ID_STORAGE_KEY = "jobportal_ai_guest_id";
 
 const toReadableError = (error: any) => {

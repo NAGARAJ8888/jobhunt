@@ -131,7 +131,7 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
       };
 
       const response = await fetch(
-        "http://localhost:5000/api/jobs",
+        `${import.meta.env.VITE_BACKEND_URL}/api/jobs`,
         {
           method: "POST",
           headers: {

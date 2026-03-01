@@ -24,7 +24,7 @@ export function Subscribe() {
         setIsLoading(true);
         try {
           // Call backend to verify the session and update subscription
-          const response = await fetch("http://localhost:5000/api/subscriptions/verify-session", {
+          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/subscriptions/verify-session`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export function Subscribe() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/subscriptions/create-checkout-session", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/subscriptions/create-checkout-session`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
