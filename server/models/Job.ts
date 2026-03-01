@@ -14,6 +14,7 @@ const JobSchema = new mongoose.Schema({
   benefits: [{ type: String }],
   about: { type: String },
   postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  featured: { type: Boolean, default: false },
 });
 
 export const Job = mongoose.model('Job', JobSchema);

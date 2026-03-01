@@ -129,6 +129,23 @@ export function Header({ onSignInClick, onSignUpClick, onPostJobClick }: HeaderP
           )}
           {user ? (
             <>
+              {/* Subscribe button for job seekers who are not subscribed */}
+              {user.role === "job_seeker" && !user.isSubscribed && (
+                <Button
+                  className="hidden md:block bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white cursor-pointer"
+                  onClick={() => navigate("/subscribe")}
+                >
+                  Subscribe
+                </Button>
+              )}
+              
+              {/* Pro Member badge for subscribed users */}
+              {user.role === "job_seeker" && user.isSubscribed && (
+                <Badge className="hidden md:flex bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-0 mr-2">
+                  Pro Member
+                </Badge>
+              )}
+
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="hidden md:flex items-center gap-2 cursor-pointer">
@@ -149,12 +166,20 @@ export function Header({ onSignInClick, onSignUpClick, onPostJobClick }: HeaderP
                     </Link>
                   </DropdownMenuItem>
                   {user.role === "job_seeker" && (
-                    <DropdownMenuItem asChild>
-                      <Link to="/my-applications" className="flex items-center cursor-pointer">
-                        <Briefcase className="mr-2 h-4 w-4" />
-                        <span>My Applications</span>
-                      </Link>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link to="/my-applications" className="flex items-center cursor-pointer">
+                          <Briefcase className="mr-2 h-4 w-4" />
+                          <span>My Applications</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      {!user.isSubscribed && (
+                        <DropdownMenuItem onClick={() => navigate("/subscribe")}>
+                          <span className="mr-2">💎</span>
+                          <span>Subscribe to Pro</span>
+                        </DropdownMenuItem>
+                      )}
+                    </>
                   )}
                   {user.role === "employer" && (
                     <DropdownMenuItem asChild>
@@ -216,13 +241,20 @@ export function Header({ onSignInClick, onSignUpClick, onPostJobClick }: HeaderP
                       </div>
                       <div className="flex-1">
                         <p className="font-medium text-foreground">{user.name}</p>
-                        <Badge variant="secondary" className="mt-1">
-                          {user.role === "job_seeker" ? "Job Seeker" : "Employer"}
-                        </Badge>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge variant="secondary">
+                            {user.role === "job_seeker" ? "Job Seeker" : "Employer"}
+                          </Badge>
+                          {user.role === "job_seeker" && user.isSubscribed && (
+                            <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-0">
+                              Pro
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Main Navigation - No search bar in mobile sidebar */}
+                    {/* Main Navigation */}
                     <nav className="space-y-1">
                       <Link
                         to="/"
@@ -276,6 +308,20 @@ export function Header({ onSignInClick, onSignUpClick, onPostJobClick }: HeaderP
                         <Briefcase className="h-4 w-4 text-muted-foreground" />
                         {user.role === "job_seeker" ? "My Applications" : "My Applications"}
                       </Link>
+                      
+                      {/* Subscribe option for job seekers */}
+                      {user.role === "job_seeker" && !user.isSubscribed && (
+                        <Button
+                          className="w-full mt-4 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white cursor-pointer"
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            navigate("/subscribe");
+                          }}
+                        >
+                          💎 Subscribe to Pro
+                        </Button>
+                      )}
+                      
                       {user.role === "employer" && (
                         <>
                           <Link

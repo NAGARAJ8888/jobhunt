@@ -7,6 +7,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Checkbox } from "./ui/checkbox";
 import { toast } from "sonner";
 import { useAuth } from "../context/AuthContext";
 import { Briefcase, Plus, X } from "lucide-react";
@@ -36,9 +37,9 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
     benefits: [""],
     about: "",
     tags: [""],
+    featured: false,
   });
 
-  // Initialize form with job data when in edit mode
   useEffect(() => {
     if (job && isEditMode) {
       setFormData({
@@ -52,6 +53,7 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
         benefits: job.benefits && job.benefits.length > 0 ? job.benefits : [""],
         about: job.about || "",
         tags: job.tags && job.tags.length > 0 ? job.tags : [""],
+        featured: (job as any).featured || false,
       });
     }
   }, [job, isEditMode]);
@@ -92,13 +94,11 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
       return;
     }
 
-    // Validate required fields
     if (!formData.title || !formData.company || !formData.location || !formData.description) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    // Filter out empty values
     const requirements = formData.requirements.filter((r) => r.trim() !== "");
     const benefits = formData.benefits.filter((b) => b.trim() !== "");
     const tags = formData.tags.filter((t) => t.trim() !== "");
@@ -115,7 +115,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
 
     setIsSubmitting(true);
     try {
-      // Create job object
       const jobData = {
         title: formData.title,
         company: formData.company,
@@ -127,10 +126,10 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
         benefits,
         about: formData.about,
         tags,
+        featured: formData.featured,
         logo: "https://images.unsplash.com/photo-1628017975048-74768e00219e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
       };
 
-      // Post job to Node.js backend
       const response = await fetch(
         "http://localhost:5000/api/jobs",
         {
@@ -156,7 +155,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
         description: "Your job listing is now live and visible to candidates.",
       });
 
-      // Reset form
       setFormData({
         title: "",
         company: "",
@@ -168,14 +166,12 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
         benefits: [""],
         about: "",
         tags: [""],
+        featured: false,
       });
 
       onClose();
-      
-      // Reload page to show new job
       window.location.reload();
       
-      // Call onJobPosted callback if provided
       if (onJobPosted) {
         onJobPosted();
       }
@@ -201,7 +197,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Job Title */}
           <div className="space-y-2">
             <Label htmlFor="title">
               Job Title <span className="text-red-500">*</span>
@@ -215,7 +210,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
             />
           </div>
 
-          {/* Company Name */}
           <div className="space-y-2">
             <Label htmlFor="company">
               Company Name <span className="text-red-500">*</span>
@@ -229,7 +223,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
             />
           </div>
 
-          {/* Location and Type */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="location">
@@ -262,7 +255,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
             </div>
           </div>
 
-          {/* Salary */}
           <div className="space-y-2">
             <Label htmlFor="salary">Salary Range</Label>
             <Input
@@ -273,7 +265,17 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
             />
           </div>
 
-          {/* Job Description */}
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="featured"
+              checked={formData.featured}
+              onCheckedChange={(checked) => setFormData({ ...formData, featured: checked as boolean })}
+            />
+            <Label htmlFor="featured" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Mark as Featured Job
+            </Label>
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="description">
               Job Description <span className="text-red-500">*</span>
@@ -288,7 +290,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
             />
           </div>
 
-          {/* Requirements */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label>
@@ -327,7 +328,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
             </div>
           </div>
 
-          {/* Benefits */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label>Benefits</Label>
@@ -364,7 +364,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
             </div>
           </div>
 
-          {/* Skill Tags */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label>
@@ -414,7 +413,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
             )}
           </div>
 
-          {/* About Company */}
           <div className="space-y-2">
             <Label htmlFor="about">About the Company</Label>
             <Textarea
@@ -426,7 +424,6 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
             />
           </div>
 
-          {/* Submit Buttons */}
           <div className="flex gap-3 pt-4">
             <Button type="submit" className="flex-1 bg-blue-400 hover:bg-blue-500 text-white cursor-pointer" disabled={isSubmitting}>
               {isSubmitting ? "Posting Job..." : "Post Job"}

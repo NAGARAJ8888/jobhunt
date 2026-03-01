@@ -10,6 +10,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string, role: "job_seeker" | "employer") => Promise<void>;
   signOut: () => Promise<void>;
+  refreshUserSubscription: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,12 +29,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const storedUser = localStorage.getItem(SESSION_STORAGE_KEY);
       if (storedUser) {
-        setUser(JSON.parse(storedUser));
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        // Fetch subscription status if user is a job seeker
+        if (parsedUser.role === "job_seeker") {
+          await fetchSubscriptionStatus(parsedUser.id);
+        }
       }
     } catch (error) {
       console.error("Error checking user session:", error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function fetchSubscriptionStatus(userId: string) {
+    try {
+      const response = await fetch(`http://localhost:5000/api/subscriptions/status/${userId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setUser((prevUser) => {
+          if (prevUser && prevUser.id === userId) {
+            const updatedUser = {
+              ...prevUser,
+              isSubscribed: data.isSubscribed,
+              subscriptionStartDate: data.subscriptionStartDate,
+              subscriptionEndDate: data.subscriptionEndDate,
+              stripeCustomerId: data.stripeCustomerId,
+            };
+            localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(updatedUser));
+            return updatedUser;
+          }
+          return prevUser;
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching subscription status:", error);
+    }
+  }
+
+  async function refreshUserSubscription() {
+    if (user && user.id) {
+      await fetchSubscriptionStatus(user.id);
     }
   }
 
@@ -152,7 +189,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, refreshUserSubscription }}>
       {children}
     </AuthContext.Provider>
   );

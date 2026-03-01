@@ -5,17 +5,20 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { toast } from "sonner";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router";
 import axios from "axios";
 
 interface ApplicationFormProps {
   jobId: string;
   jobTitle: string;
   company: string;
+  featured?: boolean;
   onSubmitSuccess?: () => void;
 }
 
-export function ApplicationForm({ jobId, jobTitle, company, onSubmitSuccess }: ApplicationFormProps) {
+export function ApplicationForm({ jobId, jobTitle, company, featured = false, onSubmitSuccess }: ApplicationFormProps) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -31,6 +34,21 @@ export function ApplicationForm({ jobId, jobTitle, company, onSubmitSuccess }: A
     // Validate form
     if (!formData.fullName || !formData.email || !formData.phone || !user) {
       toast.error("Please fill in all required fields and ensure you're logged in");
+      return;
+    }
+
+    // Check subscription for featured jobs
+    if (featured && user.role === "job_seeker" && !user.isSubscribed) {
+      toast.error(
+        "Please subscribe to apply for featured jobs.",
+        {
+          action: {
+            label: "Subscribe",
+            onClick: () => navigate("/subscribe"),
+          },
+          duration: 5000,
+        }
+      );
       return;
     }
 
@@ -82,7 +100,21 @@ export function ApplicationForm({ jobId, jobTitle, company, onSubmitSuccess }: A
           onSubmitSuccess();
         }
       } else {
-        toast.error(result.error || 'Failed to submit application');
+        // Handle subscription required error from backend
+        if (result.requiresSubscription) {
+          toast.error(
+            "Please subscribe to apply for featured jobs.",
+            {
+              action: {
+                label: "Subscribe",
+                onClick: () => navigate("/subscribe"),
+              },
+              duration: 5000,
+            }
+          );
+        } else {
+          toast.error(result.error || 'Failed to submit application');
+        }
       }
     } catch (error) {
       console.error('Error submitting application:', error);

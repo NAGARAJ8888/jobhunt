@@ -1,5 +1,6 @@
 export interface Job {
   _id: string;
+  id: string;
   title: string;
   company: string;
   location: string;
@@ -12,6 +13,7 @@ export interface Job {
   requirements: string[];
   benefits: string[];
   about: string;
+  featured?: boolean;
 }
 
 export interface User {
@@ -19,6 +21,9 @@ export interface User {
   email: string;
   name: string;
   role: "job_seeker" | "employer";
+  isSubscribed?: boolean;
+  subscriptionStartDate?: string | null;
+  subscriptionEndDate?: string | null;
 }
 
 export interface Application {

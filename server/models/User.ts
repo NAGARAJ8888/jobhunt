@@ -15,6 +15,13 @@ const UserSchema = new mongoose.Schema({
   forgotPasswordResetToken: { type: String, default: null },
   forgotPasswordResetTokenExpiresAt: { type: Date, default: null },
   createdAt: { type: Date, default: Date.now },
+  
+  // Subscription fields
+  isSubscribed: { type: Boolean, default: false },
+  subscriptionStartDate: { type: Date },
+  subscriptionEndDate: { type: Date },
+  stripeCustomerId: { type: String },
+  stripeSubscriptionId: { type: String },
 });
 
 export const User = mongoose.model('User', UserSchema);

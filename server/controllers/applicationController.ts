@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Application } from '../models/Application';
 import { User } from '../models/User';
 import { Job } from '../models/Job';
+import { checkUserSubscription } from '../services/stripeService';
 
 export const submitApplication = async (req: Request, res: Response) => {
   try {
@@ -22,6 +23,19 @@ export const submitApplication = async (req: Request, res: Response) => {
     const job = await Job.findById(jobId);
     if (!job) {
       return res.status(404).json({ error: 'Job not found' });
+    }
+
+    // Check if job is featured and if user has subscription
+    if (job.featured === true) {
+      const hasActiveSubscription = await checkUserSubscription(userId);
+      
+      if (!hasActiveSubscription) {
+        return res.status(403).json({ 
+          error: 'Subscription required',
+          message: 'Please subscribe to apply for featured jobs',
+          requiresSubscription: true
+        });
+      }
     }
 
     // Create new application with Cloudinary resume URL

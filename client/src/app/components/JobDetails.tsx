@@ -232,7 +232,7 @@ export function JobDetails({ job, open, onClose }: JobDetailsProps) {
             </TabsContent>
 
             <TabsContent value="apply" className="mt-6">
-              <ApplicationForm jobId={job.id} jobTitle={job.title} company={job.company} onSubmitSuccess={handleApplicationSubmitted} />
+              <ApplicationForm jobId={job._id || job.id || ''} jobTitle={job.title} company={job.company} featured={job.featured} onSubmitSuccess={handleApplicationSubmitted} />
             </TabsContent>
           </Tabs>
         </div>

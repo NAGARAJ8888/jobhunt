@@ -1,6 +1,7 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { connectDB } from './config/db';
 import authRoutes from './routes/authRoutes';
@@ -10,8 +11,8 @@ import employerProfileRoutes from './routes/employerProfileRoutes';
 import jobseekerProfileRoutes from './routes/jobseekerProfileRoutes';
 import chatRoutes from './routes/chatRoutes';
 import resumeRoutes from './routes/resumeRoutes';
+import subscriptionRoutes from './routes/subscriptionRoutes';
 
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -47,6 +48,7 @@ app.use('/api/employer-profiles', employerProfileRoutes);
 app.use('/api/jobseeker-profiles', jobseekerProfileRoutes);
 app.use('/api/chats', chatRoutes);
 app.use('/api/resumes', resumeRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
 
 // Error handling middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

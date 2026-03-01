@@ -16,6 +16,7 @@ interface JobCardProps {
   logo: string;
   tags: string[];
   postedDate: string;
+  featured?: boolean;
   onClick: () => void;
 }
 
@@ -29,6 +30,7 @@ export function JobCard({
   logo,
   tags,
   postedDate,
+  featured = false,
   onClick,
 }: JobCardProps) {
   const { user } = useAuth();
@@ -80,7 +82,14 @@ export function JobCard({
               </div>
             )}
           </div>
-          <p className="text-gray-600 mb-3">{company}</p>
+          <div className="flex items-center gap-2 mb-3">
+            <p className="text-gray-600">{company}</p>
+            {featured && (
+              <Badge className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white border-0 text-xs">
+                Featured
+              </Badge>
+            )}
+          </div>
 
           <div className="flex flex-wrap gap-3 mb-3 text-sm text-gray-600">
             <div className="flex items-center gap-1">
