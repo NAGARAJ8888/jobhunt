@@ -78,7 +78,7 @@ function HomePage() {
   const fetchJobs = async () => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/jobs`,
+        `${API_BASE_URL}/jobs`,
         {
           headers: {
             "Content-Type": "application/json",
