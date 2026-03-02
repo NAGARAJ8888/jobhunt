@@ -165,6 +165,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(loggedInUser);
       localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(loggedInUser));
 
+      // Fetch subscription status for job seekers immediately after login
+      if (loggedInUser.role === "job_seeker") {
+        await fetchSubscriptionStatus(loggedInUser.id);
+      }
+
       console.log("User signed in successfully:", email);
     } catch (error) {
       console.error("Sign in error:", error);
