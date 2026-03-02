@@ -23,6 +23,7 @@ export function JobDetails({ job, open, onClose }: JobDetailsProps) {
   const { user } = useAuth();
   const [hasApplied, setHasApplied] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("description");
 
   // Mock participants data - in a real app, this would come from the job data or API
   const participants = [
@@ -155,7 +156,7 @@ export function JobDetails({ job, open, onClose }: JobDetailsProps) {
           <Separator />
 
           {/* Tabs */}
-          <Tabs defaultValue="description" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="description" className="cursor-pointer">Job Details</TabsTrigger>
               {!hasApplied && <TabsTrigger value="apply" className="cursor-pointer">Apply Now</TabsTrigger>}
@@ -225,7 +226,12 @@ export function JobDetails({ job, open, onClose }: JobDetailsProps) {
                     Applied
                   </Button>
                 ) : (
-                  <Button className="flex-1 text-white bg-blue-400 hover:bg-blue-500 cursor-pointer">Apply Now</Button>
+                  <Button 
+                    className="flex-1 text-white bg-blue-400 hover:bg-blue-500 cursor-pointer"
+                    onClick={() => setActiveTab("apply")}
+                  >
+                    Apply Now
+                  </Button>
                 )}
                 <Button variant="outline" className="cursor-pointer">Save Job</Button>
               </div>
