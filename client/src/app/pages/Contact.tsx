@@ -256,7 +256,15 @@ export default function Contact() {
           <h2 className="text-3xl font-bold mb-4">Find Us</h2>
           <p className="text-gray-600 mb-8">Located in the heart of San Francisco's tech district</p>
           <div className="bg-gray-300 h-64 rounded-lg flex items-center justify-center">
-            <p className="text-gray-500">Interactive Map Placeholder</p>
+            <iframe
+  src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d124434.86580842591!2d77.7877722438595!3d12.934080905350307!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1772480893356!5m2!1sen!2sin"
+  width="100%"
+  height="100%"
+  style={{ border: 0 }}
+  allowFullScreen
+  loading="lazy"
+  referrerPolicy="no-referrer-when-downgrade"
+/>
           </div>
         </div>
       </div>
