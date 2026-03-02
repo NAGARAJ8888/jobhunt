@@ -48,8 +48,6 @@ function formatPostedDate(dateString: string): string {
   }
 }
 
-const JOBS: Job[] = [];
-
 const CATEGORIES = [
   { name: "Engineering", count: 45, icon: TrendingUp },
   { name: "Design", count: 28, icon: Users },
@@ -80,7 +78,7 @@ function HomePage() {
   const fetchJobs = async () => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/jobs`,
+        `${API_BASE_URL}/api/jobs`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -125,9 +123,9 @@ function HomePage() {
     }
   };
 
-  // Combine sample jobs with backend jobs
+  // Use only backend jobs
   const allJobs = useMemo(() => {
-    return [...backendJobs, ...JOBS];
+    return backendJobs;
   }, [backendJobs]);
 
   const filteredJobs = useMemo(() => {
@@ -215,7 +213,7 @@ function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-400 mb-1">
-                <AnimatedCounter end={JOBS.length} suffix="+" />
+                <AnimatedCounter end={backendJobs.length} suffix="+" />
               </div>
               <div className="text-gray-600 text-sm">Active Jobs</div>
             </div>
