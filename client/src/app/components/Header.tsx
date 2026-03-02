@@ -79,7 +79,7 @@ export function Header({ onSignInClick, onSignUpClick, onPostJobClick }: HeaderP
           <div className="bg-blue-400 p-2 rounded-lg">
             <Briefcase className="h-6 w-6 text-white" />
           </div>
-          <span className={`text-xl font-bold transition-all duration-200 ${isSearchFocused ? 'hidden' : 'md:hidden'}`}>JobPortal</span>
+          <span className={`text-xl font-bold transition-all duration-200 ${isSearchFocused ? 'hidden' : 'block'}`}>JobPortal</span>
         </div>
 
         <nav className="hidden md:flex items-center gap-6">
