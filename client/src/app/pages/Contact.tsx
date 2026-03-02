@@ -7,6 +7,7 @@ import { Card } from "../components/ui/card";
 import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { AIChatbot } from "../components/AIChatbot";
+import { toast } from "sonner";
 
 const CONTACT_INFO = [
   {
@@ -67,7 +68,7 @@ export default function Contact() {
     });
 
     setIsSubmitting(false);
-    alert("Thank you for your message! We'll get back to you soon.");
+    toast.success("Thank you for your message! We'll get back to you soon.");
   };
 
   return (
