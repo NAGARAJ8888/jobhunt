@@ -4,6 +4,7 @@ import { Briefcase, User, Menu, LogOut, UserCircle, FileText, Mail, Search } fro
 import { Link, useLocation, useNavigate } from "react-router";
 import { Button } from "./ui/button";
 import { useAuth } from "../context/AuthContext";
+import { useIsMobile } from "./ui/use-mobile";
 import { useEffect, useState, type FormEvent } from "react";
 import {
   DropdownMenu,
@@ -34,6 +35,7 @@ export function Header({ onSignInClick, onSignUpClick, onPostJobClick }: HeaderP
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [skillSearch, setSkillSearch] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -79,7 +81,7 @@ export function Header({ onSignInClick, onSignUpClick, onPostJobClick }: HeaderP
           <div className="bg-blue-400 p-2 rounded-lg">
             <Briefcase className="h-6 w-6 text-white" />
           </div>
-          <span className={`text-xl font-bold transition-all duration-200 ${isSearchFocused ? 'hidden' : 'block'}`}>JobPortal</span>
+          <span className={`text-xl font-bold transition-all duration-200 ${isSearchFocused && isMobile ? 'hidden' : 'block'}`}>JobPortal</span>
         </div>
 
         <nav className="hidden md:flex items-center gap-6">

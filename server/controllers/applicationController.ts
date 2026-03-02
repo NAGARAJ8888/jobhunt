@@ -19,6 +19,11 @@ export const submitApplication = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    // Check if user is a job seeker - employers cannot apply for jobs
+    if (user.role === 'employer') {
+      return res.status(403).json({ error: 'Employers cannot apply for jobs' });
+    }
+
     // Check if job exists
     const job = await Job.findById(jobId);
     if (!job) {

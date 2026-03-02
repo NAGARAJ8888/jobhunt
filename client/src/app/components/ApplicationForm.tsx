@@ -31,9 +31,21 @@ export function ApplicationForm({ jobId, jobTitle, company, featured = false, on
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Check if user is logged in
+    if (!user) {
+      toast.error("Please log in to apply for this job");
+      return;
+    }
+
+    // Check if user is an employer - employers cannot apply for jobs
+    if (user.role === "employer") {
+      toast.error("Employers cannot apply for jobs. Please switch to a job seeker account.");
+      return;
+    }
+
     // Validate form
-    if (!formData.fullName || !formData.email || !formData.phone || !user) {
-      toast.error("Please fill in all required fields and ensure you're logged in");
+    if (!formData.fullName || !formData.email || !formData.phone) {
+      toast.error("Please fill in all required fields");
       return;
     }
 

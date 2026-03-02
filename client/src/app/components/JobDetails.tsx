@@ -159,7 +159,7 @@ export function JobDetails({ job, open, onClose }: JobDetailsProps) {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="description" className="cursor-pointer">Job Details</TabsTrigger>
-              {!hasApplied && <TabsTrigger value="apply" className="cursor-pointer">Apply Now</TabsTrigger>}
+{!hasApplied && user?.role !== 'employer' && <TabsTrigger value="apply" className="cursor-pointer">Apply Now</TabsTrigger>}
             </TabsList>
 
             <TabsContent value="description" className="space-y-6 mt-6">
@@ -225,14 +225,14 @@ export function JobDetails({ job, open, onClose }: JobDetailsProps) {
                   <Button disabled className="flex-1" variant="secondary">
                     Applied
                   </Button>
-                ) : (
+                ) : user?.role !== 'employer' ? (
                   <Button 
                     className="flex-1 text-white bg-blue-400 hover:bg-blue-500 cursor-pointer"
                     onClick={() => setActiveTab("apply")}
                   >
                     Apply Now
                   </Button>
-                )}
+                ) : null}
                 <Button variant="outline" className="cursor-pointer">Save Job</Button>
               </div>
             </TabsContent>

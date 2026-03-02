@@ -105,6 +105,7 @@ function HomePage() {
           type: job.type || "Full-time",
           salary: job.salary || "N/A",
           tags: job.tags || [],
+          category: job.category || "",
           description: job.description || "",
           requirements: job.requirements || [],
           benefits: job.benefits || [],
@@ -148,9 +149,7 @@ function HomePage() {
 
       const matchesCategory =
         categoryFilter === "all" ||
-        job.tags.some((tag) =>
-          tag.toLowerCase().includes(categoryFilter.toLowerCase())
-        );
+        (job as any).category?.toLowerCase() === categoryFilter.toLowerCase();
 
       return matchesSearch && matchesLocation && matchesType && matchesCategory;
     });

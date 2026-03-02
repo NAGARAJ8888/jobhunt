@@ -37,6 +37,7 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
     benefits: [""],
     about: "",
     tags: [""],
+    category: "",
     featured: false,
   });
 
@@ -53,6 +54,7 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
         benefits: job.benefits && job.benefits.length > 0 ? job.benefits : [""],
         about: job.about || "",
         tags: job.tags && job.tags.length > 0 ? job.tags : [""],
+        category: (job as any).category || "",
         featured: (job as any).featured || false,
       });
     }
@@ -126,6 +128,7 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
         benefits,
         about: formData.about,
         tags,
+        category: formData.category,
         featured: formData.featured,
         logo: "https://images.unsplash.com/photo-1628017975048-74768e00219e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
       };
@@ -166,6 +169,7 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
         benefits: [""],
         about: "",
         tags: [""],
+        category: "",
         featured: false,
       });
 
@@ -249,20 +253,39 @@ export function PostJobModal({ open, onClose, onJobPosted, job, isEditMode = fal
                   <SelectItem value="Full-time">Full-time</SelectItem>
                   <SelectItem value="Part-time">Part-time</SelectItem>
                   <SelectItem value="Contract">Contract</SelectItem>
-                  <SelectItem value="Remote">Remote</SelectItem>
+                  <SelectItem value="Internship">Internship</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="salary">Salary Range</Label>
-            <Input
-              id="salary"
-              placeholder="e.g. $120k - $160k or £70k - £95k"
-              value={formData.salary}
-              onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="category">Category</Label>
+              <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
+                <SelectTrigger id="category">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="engineering">Engineering</SelectItem>
+                  <SelectItem value="design">Design</SelectItem>
+                  <SelectItem value="marketing">Marketing</SelectItem>
+                  <SelectItem value="sales">Sales</SelectItem>
+                  <SelectItem value="product">Product</SelectItem>
+                  <SelectItem value="data">Data Science</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="salary">Salary Range</Label>
+              <Input
+                id="salary"
+                placeholder="e.g. $120k - $160k or £70k - £95k"
+                value={formData.salary}
+                onChange={(e) => setFormData({ ...formData, salary: e.target.value })}
+              />
+            </div>
           </div>
 
           <div className="flex items-center space-x-2">

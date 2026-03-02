@@ -13,6 +13,7 @@ const JobSchema = new mongoose.Schema({
   requirements: [{ type: String }],
   benefits: [{ type: String }],
   about: { type: String },
+  category: { type: String },
   postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   featured: { type: Boolean, default: false },
 });
