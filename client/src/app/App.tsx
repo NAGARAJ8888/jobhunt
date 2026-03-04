@@ -13,6 +13,7 @@ import { AIChatbot } from "./components/AIChatbot";
 import { AuthProvider } from "./context/AuthContext";
 import { Card } from "./components/ui/card";
 import { Toaster } from "./components/ui/sonner";
+import { Skeleton } from "./components/ui/skeleton";
 import Companies from "./pages/Companies";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -294,7 +295,32 @@ function HomePage() {
             </div>
 
             <div className="space-y-4">
-              {filteredJobs.length > 0 ? (
+              {loadingJobs ? (
+                // Loading skeleton - show 6 skeleton cards while loading
+                Array.from({ length: 6 }).map((_, index) => (
+                  <Card key={index} className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-4">
+                        <Skeleton className="h-12 w-12 rounded-lg" />
+                        <div>
+                          <Skeleton className="h-5 w-48 mb-2" />
+                          <Skeleton className="h-4 w-32" />
+                        </div>
+                      </div>
+                      <Skeleton className="h-6 w-20 rounded-full" />
+                    </div>
+                    <div className="flex gap-2 mb-4">
+                      <Skeleton className="h-5 w-24 rounded-full" />
+                      <Skeleton className="h-5 w-24 rounded-full" />
+                      <Skeleton className="h-5 w-24 rounded-full" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Skeleton className="h-4 w-40" />
+                      <Skeleton className="h-9 w-24" />
+                    </div>
+                  </Card>
+                ))
+              ) : filteredJobs.length > 0 ? (
                 paginatedJobs.map((job) => (
                   <JobCard
                     key={job.id}
