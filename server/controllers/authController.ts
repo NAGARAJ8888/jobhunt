@@ -23,8 +23,16 @@ const getMailTransporter = () => {
   const smtpPass = process.env.SMTP_PASS;
 
   if (!smtpHost || !smtpUser || !smtpPass) {
-    throw new Error('SMTP configuration missing. Set SMTP_HOST, SMTP_USER, SMTP_PASS (and optional SMTP_PORT, SMTP_SECURE, MAIL_FROM).');
+    console.error('SMTP Configuration Error:');
+    console.error('SMTP_HOST:', smtpHost ? '✓ set' : '✗ MISSING');
+    console.error('SMTP_USER:', smtpUser ? '✓ set' : '✗ MISSING');
+    console.error('SMTP_PASS:', smtpPass ? '✓ set' : '✗ MISSING');
+    console.error('SMTP_PORT:', smtpPort);
+    console.error('SMTP_SECURE:', smtpSecure);
+    throw new Error('SMTP configuration missing. Set SMTP_HOST, SMTP_USER, SMTP_PASS (and optional SMTP_PORT, SMTP_SECURE, MAIL_FROM) in environment variables.');
   }
+
+  console.log('Initializing SMTP transporter with host:', smtpHost, 'port:', smtpPort);
 
   return nodemailer.createTransport({
     host: smtpHost,
@@ -39,13 +47,16 @@ const getMailTransporter = () => {
 
 const sendPasswordResetOtpEmail = async (email: string, otp: string) => {
   const mailFrom = process.env.MAIL_FROM || process.env.SMTP_USER;
-  const transporter = getMailTransporter();
-  await transporter.sendMail({
-    from: mailFrom,
-    to: email,
-    subject: 'JobPortal Password Reset OTP',
-    text: `Your JobPortal password reset OTP is ${otp}. It expires in 10 minutes.`,
-    html: `
+  console.log('Sending OTP email to:', email, 'from:', mailFrom);
+  
+  try {
+    const transporter = getMailTransporter();
+    const result = await transporter.sendMail({
+      from: mailFrom,
+      to: email,
+      subject: 'JobPortal Password Reset OTP',
+      text: `Your JobPortal password reset OTP is ${otp}. It expires in 10 minutes.`,
+      html: `
       <div style="font-family: Arial, sans-serif; line-height:1.6;">
         <h2 style="margin-bottom:8px;">JobPortal Password Reset</h2>
         <p>Use this OTP to reset your password:</p>
@@ -54,7 +65,15 @@ const sendPasswordResetOtpEmail = async (email: string, otp: string) => {
         <p>If you did not request this, you can ignore this email.</p>
       </div>
     `,
-  });
+    });
+    console.log('OTP email sent successfully. MessageId:', result.messageId);
+  } catch (error: any) {
+    console.error('Failed to send OTP email:');
+    console.error('Error message:', error.message);
+    console.error('Error code:', error.code);
+    console.error('Error response:', error.response);
+    throw error;
+  }
 };
 
 export const signup = async (req: Request, res: Response) => {
